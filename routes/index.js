@@ -20,7 +20,7 @@ router.get("/login", function(req, res) {
 // Logout Route
 router.get("/logout", function(req, res) {
    req.logout();
-   res.redirect("/places");
+   res.redirect("/index");
 });
 
 module.exports = router;
