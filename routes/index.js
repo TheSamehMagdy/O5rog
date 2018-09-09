@@ -40,6 +40,14 @@ router.get("/login", function(req, res) {
     res.render("login");    
 });
 
+// Login Logic
+router.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/",
+        failureRedirect: "/login"
+    }), function(req, res) {
+});
+
 // Logout Route
 router.get("/logout", function(req, res) {
    req.logout();
