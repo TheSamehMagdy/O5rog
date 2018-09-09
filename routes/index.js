@@ -4,7 +4,7 @@ var passport   = require("passport");
 
 // Root Route
 router.get("/", function(req, res){
-    res.render("index");    
+    res.render("places/index");    
 });
 
 // Signup Form
@@ -20,7 +20,7 @@ router.get("/login", function(req, res) {
 // Logout Route
 router.get("/logout", function(req, res) {
    req.logout();
-   res.redirect("/index");
+   res.redirect("places/index");
 });
 
 module.exports = router;
