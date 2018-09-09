@@ -10,7 +10,7 @@ var express        = require("express"),
     
 // Requiring routes
 var indexRoutes      = require("./routes/index");
-    
+// Set up database env variable
 var url = process.env.DATABASEURL || "mongodb://localhost/egyplaces";
 
 mongoose.connect(url, {useNewUrlParser: true});
@@ -27,18 +27,18 @@ app.use(require("express-session")({
     saveUninitialized: false
 }));
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// app.use(function(req, res, next){
-//     res.locals.currentUser = req.user;
-//     res.locals.error = req.flash("error");
-//     res.locals.success = req.flash("success");
-//     next();
-// });
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
+});
 
 app.use(indexRoutes);
 // app.use(placeRoutes);
