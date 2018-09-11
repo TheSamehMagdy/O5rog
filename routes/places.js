@@ -53,7 +53,7 @@ router.get("/:id", function(req, res){
            res.redirect("back");
        } else {
            // render show template with that place
-           res.render("/show", {place: foundPlace});
+           res.render("places/show", {place: foundPlace});
        }
     });
 });
