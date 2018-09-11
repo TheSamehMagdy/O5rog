@@ -31,11 +31,8 @@
             </div>
             <hr>
             <div class="card">
-                  <div class="card-header">Reviews</div>
-                  <div class="card-body">
-                      <div class="text-right">
-                            <a class="btn btn-success" href="/<%=place._id%>/comments/new">Leave a Review</a>    
-                      </div>
+                  <div class="card-header">Reviews
+                            <a class="btn btn-success float-right" href="/<%=place._id%>/comments/new">Leave a Review</a>    
                   </div>
                   <ul class="list-group list-group-flush">
                     <% place.comments.forEach(function(comment){ %>
