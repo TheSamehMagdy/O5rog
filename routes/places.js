@@ -1,6 +1,6 @@
 var express    = require("express");
 var router     = express.Router();
-var Place = require("../models/place");
+var Place      = require("../models/place");
 var middleware = require("../middleware");
 
 //INDEX - show all places
@@ -81,16 +81,16 @@ router.get("/:id", function(req, res){
 //     });  
 // });
 
-//DESTROY - delete place
-// router.delete("/:id", middleware.checkPlaceOwnership, function(req, res){
-//   Place.findByIdAndRemove(req.params.id, function(err){
-//       if(err) {
-//           req.flash("error", "Place not found.");
-//           res.redirect("/");
-//       } else {
-//           res.redirect("/");
-//       }
-//   });
-// });
+// DESTROY - delete place
+router.delete("/:id",  function(req, res){
+  Place.findByIdAndRemove(req.params.id, function(err){
+      if(err) {
+          req.flash("error", "Place not found.");
+          res.redirect("/");
+      } else {
+          res.redirect("/");
+      }
+  });
+});
 
 module.exports = router;

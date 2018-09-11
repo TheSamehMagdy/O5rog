@@ -11,7 +11,8 @@ var express        = require("express"),
     
 // Requiring routes
 var indexRoutes      = require("./routes/index");
-var placeRoutes      = require("./routes/places")
+var placeRoutes      = require("./routes/places");
+
 // Set up database env variable
 var url = process.env.DATABASEURL || "mongodb://localhost/egyplaces";
 
