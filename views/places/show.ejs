@@ -40,12 +40,12 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <strong><%= comment.author.username %></strong>
-                                    <span class="text-right"><%= moment(comment.createdAt).fromNow() %></span>
-                                    <p>
+                                    <span class="text-right"><%= moment(comment.createdAt).fromNow() %></span> <br>
+                                    <p class="d-inline-flex float-left clearfix">
                                         <%= comment.text %>  
                                     </p>
                                     <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group float-right" role="group">
                                             <a class="btn btn-xs btn-warning m-2" 
                                                 href="/<%=place._id%>/comments/<%=comment._id%>/edit">
                                                 Edit
