@@ -59,27 +59,27 @@ router.get("/:id", function(req, res){
 });
 
 //EDIT - show edit form
-// router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
-//         Place.findById(req.params.id, function(err, foundPlace){
-//             if(err){
-//                 req.flash("error", "Place not found.");
-//                 res.redirect("/");
-//             }
-//             res.render("editplace", {place: foundPlace});    
-//         });
-// });
+router.get("/:id/edit", middleware.checkPlaceOwnership, function(req, res) {
+        Place.findById(req.params.id, function(err, foundPlace){
+            if(err){
+                req.flash("error", "Place not found.");
+                res.redirect("/");
+            }
+            res.render("places/editplace", {place: foundPlace});    
+        });
+});
 
 //UPDATE - update place
-// router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
-//     Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
-//         if(err) {
-//             req.flash("error", "Place not found.");
-//             res.redirect("/");
-//         } else {
-//             res.redirect("/" + req.params.id);
-//         }
-//     });  
-// });
+router.put("/:id", middleware.checkPlaceOwnership, function(req, res) {
+    Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
+        if(err) {
+            req.flash("error", "Place not found.");
+            res.redirect("/");
+        } else {
+            res.redirect("/" + req.params.id);
+        }
+    });  
+});
 
 // DESTROY - delete place
 router.delete("/:id", middleware.checkPlaceOwnership, function(req, res){
