@@ -37,7 +37,7 @@ router.post("/signup", function(req, res) {
             return res.render("signup", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to Egyplaces, " + user.username + "!");
+            req.flash("success", "Welcome to Egyplaces, " + user.firstName + "!");
             res.redirect("/");
         });
     });
