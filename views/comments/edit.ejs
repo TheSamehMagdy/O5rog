@@ -1,0 +1,19 @@
+<% include ../partials/header %>
+
+    <div class="row text-center">
+        <div class="col-lg-12 mx-auto">
+            <h1 class="mb-4">Edit Review</h1>
+            <div class="w-25 mx-auto">
+                <form action="/<%=place._id%>/comments/<%=comment._id%>?_method=PUT" method="POST">
+                    <div class="form-group">
+                        <input class="form-control mb-4" type="text" name="comment[text]" value="<%=comment.text%>" required>    
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg btn-block">Save Changes</button>
+                    </div>
+                </form>
+                <a href="/"> Go Back</a> 
+            </div>
+        </div>
+    </div>
+
+<% include ../partials/footer %>
