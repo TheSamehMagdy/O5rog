@@ -11,14 +11,14 @@ router.get("/", function(req, res){
             req.flash("error", "Failed to retrieve places.");
             res.redirect("/");
         } else {
-           res.render("/", {places: allPlaces}); 
+           res.render("places/index", {places: allPlaces}); 
         }
     });
 });
 
 //NEW - show form to create new place
 router.get("/newplace", middleware.isLoggedIn, function(req, res){
-    res.render("/newplace");
+    res.render("places/newplace");
 });
 
 //CREATE - add new place to DB
