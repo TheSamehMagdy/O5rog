@@ -2,7 +2,7 @@ var Place = require("../models/place");
 
 var middlewareObj = {};
 
-middlewareObj.checkplaceOwnership = function(req, res, next) {
+middlewareObj.checkPlaceOwnership = function(req, res, next) {
  if(req.isAuthenticated()){
         Place.findById(req.params.id, function(err, foundPlace){
            if(err || !foundPlace){

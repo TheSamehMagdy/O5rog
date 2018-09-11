@@ -82,7 +82,7 @@ router.get("/:id", function(req, res){
 // });
 
 // DESTROY - delete place
-router.delete("/:id",  function(req, res){
+router.delete("/:id", middleware.checkPlaceOwnership, function(req, res){
   Place.findByIdAndRemove(req.params.id, function(err){
       if(err) {
           req.flash("error", "Place not found.");
