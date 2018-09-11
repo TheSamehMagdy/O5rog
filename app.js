@@ -12,6 +12,7 @@ var express        = require("express"),
 // Requiring routes
 var indexRoutes      = require("./routes/index");
 var placeRoutes      = require("./routes/places");
+var commentRoutes    = require("./routes/comments");
 
 // Set up database env variable
 var url = process.env.DATABASEURL || "mongodb://localhost/egyplaces";
@@ -45,7 +46,7 @@ app.use(function(req, res, next){
 
 app.use(indexRoutes);
 app.use(placeRoutes);
-// app.use(commentRoutes);
+app.use(commentRoutes);
 
 // Start server
 app.listen(process.env.PORT, process.env.IP, function() {

@@ -1,0 +1,20 @@
+<% include ../partials/header %>
+
+    <div class="row text-center">
+        <div class="col-lg-12 mx-auto">
+            <h1 class="mb-4">Add Review to <%=place.name%></h1>
+            <div class="w-25 mx-auto">
+                <form action="/<%=place._id%>/comments" method="POST">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="comment[text]" placeholder="review" required>    
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-lg btn-block">Submit Review</button>
+                    </div>
+                </form>
+                <a href="/"> Go Back</a> 
+            </div>
+        </div>
+    </div>
+
+<% include ../partials/footer %>
