@@ -39,7 +39,6 @@ router.post("/:id/comments", middleware.isLoggedIn, function(req, res){
                   // Connect new comment to place
                   place.comments.push(comment);
                   place.save();
-                  console.log(comment);
                   // redirect to place show page
                   req.flash("success", "Comment added successfully.");
                   res.redirect("/" + place._id);
