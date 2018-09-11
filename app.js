@@ -6,10 +6,12 @@ var express        = require("express"),
     passport       = require("passport"),
     LocalStrategy  = require("passport-local"),
     methodOverride = require("method-override"),
-    User           = require("./models/user");
+    User           = require("./models/user"),
+    Place          = require("./models/place");
     
 // Requiring routes
 var indexRoutes      = require("./routes/index");
+var placeRoutes      = require("./routes/places")
 // Set up database env variable
 var url = process.env.DATABASEURL || "mongodb://localhost/egyplaces";
 
@@ -41,7 +43,7 @@ app.use(function(req, res, next){
 });
 
 app.use(indexRoutes);
-// app.use(placeRoutes);
+app.use(placeRoutes);
 // app.use(commentRoutes);
 
 // Start server

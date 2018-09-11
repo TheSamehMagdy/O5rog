@@ -11,18 +11,18 @@
         </header>
         
         <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-           
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card">
-                        <img class="card-img-top" src="https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/35266910_1067095123455057_8579940752858021888_o.jpg?_nc_cat=0&oh=b312460bb5adb3a6ac2658df9649d6c7&oe=5C355B84" alt="Card image cap">
-                        <div class="card-body">
-                            <h4 class="card-title">District 9</h5>
-                            <p class="card-text">Place description</p>
-                            <a href="#" class="btn btn-primary">Info</a>
+                <% places.forEach(function(place){ %>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card">
+                            <img class="card-img-top" src="<%=place.image%>" alt="Card image cap">
+                            <div class="card-body">
+                                <h4 class="card-title"><%=place.name%></h4>
+                                <p class="card-text"><%=place.address%></p>
+                                <a href="#" class="btn btn-primary">Info</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-           
+                <% }); %>
         </div>
         
 
