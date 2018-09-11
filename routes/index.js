@@ -62,4 +62,21 @@ router.get("/logout", function(req, res) {
    res.redirect("/");
 });
 
+// User profile
+router.get("/users/:id", function(req, res) {
+   User.findById(req.params.id, function(err, foundUser){
+       if(err) {
+           req.flash("error", "User not found.");
+           res.redirect("back");
+       }
+       Place.find().where("author.id").equals(foundUser._id).exec(function(err, places){
+       if(err) {
+           req.flash("error", "User not found.");
+           res.redirect("back");
+       }    
+        res.render("users/show", {user: foundUser, places: places});
+       });
+   });
+});
+
 module.exports = router;
