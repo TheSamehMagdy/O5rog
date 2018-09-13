@@ -6,14 +6,7 @@ var Place      = require("../models/place");
 
 // Root Route
 router.get("/", function(req, res){
-    Place.find({}, function(err, allPlaces){
-        if(err){
-            req.flash("error", "Failed to retrieve places.");
-            res.redirect("/");
-        } else {
-           res.render("places/index", {places: allPlaces}); 
-        }
-    });
+    res.redirect("/places");    
 });
 
 // Signup Form
@@ -38,7 +31,7 @@ router.post("/signup", function(req, res) {
         }
         passport.authenticate("local")(req, res, function(){
             req.flash("success", "Welcome to Egyplaces, " + user.firstName + "!");
-            res.redirect("/");
+            res.redirect("/places");
         });
     });
 });
@@ -54,14 +47,14 @@ router.post("/login", passport.authenticate("local", {failureRedirect: "/login"}
         // redirect to the page user was on before clicking "login"
         res.redirect(req.body.referer);
     } else {
-        res.redirect("/");
+        res.redirect("/places");
     }
 });
 
 // Logout Route
 router.get("/logout", function(req, res) {
    req.logout();
-   res.redirect("/");
+   res.redirect("/places");
 });
 
 // User profile

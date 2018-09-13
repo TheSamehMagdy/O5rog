@@ -4,7 +4,7 @@
         <div class="col-lg-12 mx-auto">
             <h1 class="mb-4">Add Review to <%=place.name%></h1>
             <div class="w-25 mx-auto">
-                <form action="/<%=place._id%>/comments" method="POST">
+                <form action="/places/<%=place._id%>/comments" method="POST">
                     <div class="form-group">
                         <textarea class="form-control" name="comment[text]" placeholder="Write your review of the place" required></textarea>
                     </div>
@@ -12,7 +12,7 @@
                         <button class="btn btn-primary btn-lg btn-block">Submit Review</button>
                     </div>
                 </form>
-                <a href="/"> Go Back</a> 
+                <a href="/places"> Go Back</a> 
             </div>
         </div>
     </div>

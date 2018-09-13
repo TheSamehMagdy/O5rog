@@ -4,7 +4,7 @@
         <div class="col-lg-12 mx-auto">
             <h1 class="mb-4">Edit <%=place.name%></h1>
             <div class="w-25 mx-auto">
-                <form action="/<%=place._id%>?_method=PUT" method="POST">
+                <form action="/places/<%=place._id%>?_method=PUT" method="POST">
                     <div class="form-group">
                         <input class="form-control" type="text" name="place[name]" value="<%=place.name%>" required>    
                     </div>
@@ -21,7 +21,7 @@
                         <button class="btn btn-primary btn-lg btn-block">Save Changes</button>
                     </div>
                 </form>
-                <a href="/"> Go Back</a> 
+                <a href="/places"> Go Back</a> 
             </div>
         </div>
     </div>

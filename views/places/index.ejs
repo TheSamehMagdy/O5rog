@@ -5,7 +5,7 @@
                 <h1>Welcome to O5rog!</h1>
                 <p>Where you go to hangout.</p>
                 <p>
-                    <a class="btn btn-primary btn-lg" href="/newplace">Add New Place</a>
+                    <a class="btn btn-primary btn-lg" href="/places/new">Add New Place</a>
                 </p>
             </div>
         </header>
@@ -18,7 +18,7 @@
                             <div class="card-body">
                                 <h4 class="card-title"><%=place.name%></h4>
                                 <p class="card-text" lang="ar" dir="RTL"><%=place.address%></p>
-                                <a href="/<%=place._id%>" class="btn btn-primary">Info</a>
+                                <a href="/places/<%=place._id%>" class="btn btn-primary">Info</a>
                             </div>
                         </div>
                     </div>
