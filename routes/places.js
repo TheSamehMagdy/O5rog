@@ -30,7 +30,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
     var desc = req.body.description;
     var author = {
         id: req.user._id,
-        username: req.user.username
+        username: req.user.firstName + " " + req.user.lastName
     };
     var newPlace = {name: name, address: address, image: image, description: desc, author: author};
     // Create a new place and save to DB

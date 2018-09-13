@@ -24,7 +24,6 @@ router.get("/signup", function(req, res) {
 // Signup Logic
 router.post("/signup", function(req, res) {
     var newUser = new User({
-        username: req.body.username,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
