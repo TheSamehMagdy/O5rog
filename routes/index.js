@@ -45,15 +45,17 @@ router.post("/signup", function(req, res) {
 
 // Login Form
 router.get("/login", function(req, res) {
-    res.render("login");    
+    res.render("login", {referer: req.headers.referer});    
 });
 
 // Login Logic
-router.post("/login", passport.authenticate("local", 
-    {
-        successRedirect: "/",
-        failureRedirect: "/login"
-    }), function(req, res) {
+router.post("/login", passport.authenticate("local", {failureRedirect: "/login"}), (req, res) => {
+    if (req.body.referer && (req.body.referer !== undefined && req.body.referer.slice(-6) !== "/login")) {
+        // redirect to the page user was on before clicking "login"
+        res.redirect(req.body.referer);
+    } else {
+        res.redirect("/");
+    }
 });
 
 // Logout Route
