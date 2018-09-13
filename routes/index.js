@@ -26,6 +26,7 @@ router.post("/signup", function(req, res) {
     var newUser = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        username: req.body.firstName + " " + req.body.lastName,
         email: req.body.email,
         avatar: req.body.avatar
     });
