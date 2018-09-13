@@ -15,7 +15,7 @@ var placeRoutes      = require("./routes/places");
 var commentRoutes    = require("./routes/comments");
 
 // Set up database env variable
-var url = process.env.DATABASEURL || "mongodb://localhost/egyplaces";
+var url = process.env.DATABASEURL || "mongodb://localhost/o5rog";
 
 mongoose.connect(url, {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
