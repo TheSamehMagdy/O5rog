@@ -5,6 +5,17 @@ var middleware  = require("../middleware");
 
 //INDEX - show all places
 router.get("/places", function(req, res){
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Place.find({name: regex}, function(err, allPlaces){
+            if(err){
+                req.flash("error", "Failed to retrieve places.");
+                res.redirect("/");
+            } else {
+               res.render("places/index", {places: allPlaces}); 
+            }
+        });        
+    } else {
     // Get all places from DB
     Place.find({}, function(err, allPlaces){
         if(err){
@@ -14,6 +25,7 @@ router.get("/places", function(req, res){
            res.render("places/index", {places: allPlaces}); 
         }
     });
+    }
 });
 
 //NEW - show form to create new place
@@ -141,6 +153,10 @@ router.put("/places/:id/unrecom", middleware.isLoggedIn, function(req, res){
         }
     });  
 });
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 
 module.exports = router;

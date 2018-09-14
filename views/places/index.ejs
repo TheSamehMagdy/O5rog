@@ -9,6 +9,14 @@
                 </p>
             </div>
         </header>
+        <div class="row text-center mb-4" style="display:flex; flex-wrap: wrap;">
+            <form action="/places" method="get" class="form-inline mx-auto">
+                <div class="form-group">
+                    <input type="text" name="search" placeholder="Search for a place..." class="form-control mr-2">
+                    <input type="submit" value="Search" class="btn btn-success">
+                </div>
+            </form>
+        </div>
         
         <div class="row text-center" style="display:flex; flex-wrap: wrap;">
                 <% places.forEach(function(place){ %>
