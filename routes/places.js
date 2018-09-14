@@ -54,7 +54,8 @@ router.get("/places/:id", function(req, res){
            res.redirect("back");
        } else {
            // render show template with that place
-           res.render("places/show", {place: foundPlace});
+           var recomUsersStr = foundPlace.recomUsers.toString();
+           res.render("places/show", {place: foundPlace, recomUsersStr: recomUsersStr});
        }
     });
 });

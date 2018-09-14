@@ -23,9 +23,11 @@
                         <p id="recomCount">
                             <%=place.recoms%> people recommend this place.
                         </p>
+                        <% if(currentUser && !recomUsersStr.includes(currentUser.id)) { %>
                         <form action="/places/<%=place.id%>/recom/?_method=PUT" method="post">
                             <button id="recomButton" class="btn btn-xs btn-success">Recommend this place</a>
                         </form>
+                        <% } %>
                     </div>
                     
                     <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
