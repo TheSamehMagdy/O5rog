@@ -8,6 +8,12 @@ var placeSchema = new mongoose.Schema({
     description: String,
     createdAt: {type: Date, default: Date.now},
     recoms: Number,
+    recomUsers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"    
+        }    
+    ],
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

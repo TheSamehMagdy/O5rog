@@ -95,15 +95,25 @@ router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
 });
 
 router.put("/places/:id/recom", middleware.isLoggedIn, function(req, res){
-    Place.findById(req.params.id, function(err, place){
-        console.log(req.params.id);
+    Place.findById(req.params.id, function(err, place, recomUser){
         if(err){
             req.flash("error", "Something went wrong.");
             res.redirect("back");
         } else {
+            // Check if user already recommended place
+            var recomUsersStr = place.recomUsers.toString();
+            if (recomUsersStr.includes(req.user.id)){
+                // Don't incremenet recoms
+                req.flash("success", "You've already recomended this place.");
+                return res.redirect("back");            
+            } else {
+            // Increment recoms and add user to recomUsers array of current place
+            recomUser = req.user._id;
+            place.recomUsers.push(recomUser);
             place.recoms++;
             place.save();
             res.redirect("/places/" + req.params.id);
+            }
         }
     });  
 });
