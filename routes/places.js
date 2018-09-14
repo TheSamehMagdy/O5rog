@@ -12,19 +12,23 @@ router.get("/places", function(req, res){
                 req.flash("error", "Failed to retrieve places.");
                 res.redirect("/");
             } else {
-               res.render("places/index", {places: allPlaces}); 
+                if(allPlaces.length < 1) {
+                    req.flash("error", "No matching place found.");
+                    return res.redirect("back");
+                }
+                res.render("places/index", {places: allPlaces}); 
             }
         });        
     } else {
-    // Get all places from DB
-    Place.find({}, function(err, allPlaces){
-        if(err){
-            req.flash("error", "Failed to retrieve places.");
-            res.redirect("/");
-        } else {
-           res.render("places/index", {places: allPlaces}); 
-        }
-    });
+        // Get all places from DB
+        Place.find({}, function(err, allPlaces){
+            if(err){
+                req.flash("error", "Failed to retrieve places.");
+                res.redirect("/");
+            } else {
+               res.render("places/index", {places: allPlaces}); 
+            }
+        });
     }
 });
 
