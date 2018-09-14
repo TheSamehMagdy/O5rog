@@ -95,6 +95,7 @@ router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
   });
 });
 
+// Recommend Place
 router.put("/places/:id/recom", middleware.isLoggedIn, function(req, res){
     Place.findById(req.params.id, function(err, place, recomUser){
         if(err){
@@ -114,6 +115,28 @@ router.put("/places/:id/recom", middleware.isLoggedIn, function(req, res){
             place.recoms++;
             place.save();
             res.redirect("/places/" + req.params.id);
+            }
+        }
+    });  
+});
+
+// Unrecommend place
+router.put("/places/:id/unrecom", middleware.isLoggedIn, function(req, res){
+    Place.findById(req.params.id, function(err, place, recomUser){
+        if(err){
+            req.flash("error", "Something went wrong.");
+            res.redirect("back");
+        } else {
+            // Check if user already recommended place
+            var recomUsersStr = place.recomUsers.toString();
+            if (recomUsersStr.includes(req.user.id)){
+                // decrement recoms and remove user from places recomUsers
+                recomUser = req.user._id;
+                var toRemove = place.recomUsers.indexOf(recomUser) - 1;
+                place.recomUsers.splice(toRemove, 1);
+                place.recoms--;
+                place.save();
+                res.redirect("/places/" + req.params.id);
             }
         }
     });  

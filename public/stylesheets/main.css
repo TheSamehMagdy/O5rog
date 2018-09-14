@@ -1,3 +1,9 @@
 nav {
     margin-bottom: 2em;
 }
+
+#recommend {
+    margin-top: 20%;
+    border: solid 1px #333;
+    padding: 30px;
+}

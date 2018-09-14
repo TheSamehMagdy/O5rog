@@ -13,22 +13,40 @@
             <div class="card mb-4">
                 <img class="card-img-top" src="<%=place.image%>" alt="Card image cap">
                 <div class="card-body">
-                    <h4 class="card-title"><%=place.name%></h4>
-                    <h4 class="card-text" lang="ar" dir="RTL"><%=place.address%></h4>
-                    <p> <%= place.description %> </p>
-                    <p>
-                        <em>Submitted by: <a href="/users/<%=place.author.id%>"><%= place.author.username %></a>, <%= moment(place.createdAt).fromNow() %></em>
-                    </p>
-                    <div id="recommend" class="float-right text-center">
-                        <p id="recomCount">
-                            <%=place.recoms%> people recommend this place.
-                        </p>
-                        <% if(currentUser && !recomUsersStr.includes(currentUser.id)) { %>
-                        <form action="/places/<%=place.id%>/recom/?_method=PUT" method="post">
-                            <button id="recomButton" class="btn btn-xs btn-success">Recommend this place</a>
-                        </form>
-                        <% } %>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="card-title"><%=place.name%></h4>
+                            <h4 class="card-text" lang="ar" dir="RTL"><%=place.address%></h4>
+                            <p> <%= place.description %> </p>
+                            <p>
+                                <em>Submitted by: <a href="/users/<%=place.author.id%>"><%= place.author.username %></a>, <%= moment(place.createdAt).fromNow() %></em>
+                            </p>    
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="recommend" class="float-right text-center">
+                                <p id="recomCount">
+                                    <% if(place.recoms > 1){ %>
+                                        <%=place.recoms%> people recommend this place
+                                    <% } else if(place.recoms === 1){ %>
+                                        <%=place.recoms%> person recommends this place
+                                    <% } else{ %>
+                                        No one recommended this place yet
+                                    <% } %>
+                                </p>
+                                <% if(currentUser && !recomUsersStr.includes(currentUser.id)) { %>
+                                <form action="/places/<%=place.id%>/recom/?_method=PUT" method="post">
+                                    <button id="recomButton" class="btn btn-xs btn-success">Recommend this place</a>
+                                </form>
+                                <% } else if (currentUser && recomUsersStr.includes(currentUser.id)) { %>
+                                <form action="/places/<%=place.id%>/unrecom/?_method=PUT" method="post">
+                                    <button id="unrecomButton" class="btn btn-xs btn-info">Unrecommend place</a> 
+                                </form>
+                                <% } %>
+                            </div>    
+                        </div>
                     </div>
+                    
+                    
                     
                     <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
                         <div class="btn-group" role="group">
