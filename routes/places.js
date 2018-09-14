@@ -1,7 +1,7 @@
-var express    = require("express");
-var router     = express.Router();
-var Place      = require("../models/place");
-var middleware = require("../middleware");
+var express     = require("express");
+var router      = express.Router();
+var Place       = require("../models/place");
+var middleware  = require("../middleware");
 
 //INDEX - show all places
 router.get("/places", function(req, res){
@@ -28,11 +28,12 @@ router.post("/places", middleware.isLoggedIn, function(req, res){
     var address = req.body.address;
     var image = req.body.image;
     var desc = req.body.description;
+    var recoms = 0;
     var author = {
         id: req.user._id,
         username: req.user.firstName + " " + req.user.lastName
     };
-    var newPlace = {name: name, address: address, image: image, description: desc, author: author};
+    var newPlace = {name: name, address: address, image: image, description: desc, author: author, recoms: recoms};
     // Create a new place and save to DB
     Place.create(newPlace, function(err, newlyCreated){
         if(err) {
@@ -92,5 +93,33 @@ router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
       }
   });
 });
+
+// Recommend Place
+// router.get('/places/:id/recom', function(req, res) {
+//     Place.findById(req.params.id, function(err, foundPlace){
+//         if(err){
+//             req.flash("error", "Something went wrong.");
+//             res.redirect("back");
+//         } else {
+//             foundPlace.recoms++;
+//             res.redirect("back");
+//         }
+//     });  
+// });
+
+router.put("/places/:id/recom", function(req, res){
+    Place.findById(req.params.id, function(err, place){
+        console.log(req.params.id);
+        if(err){
+            req.flash("error", "Something went wrong.");
+            res.redirect("back");
+        } else {
+            place.recoms++;
+            place.save();
+            res.redirect("/places/" + req.params.id);
+        }
+    });  
+});
+
 
 module.exports = router;

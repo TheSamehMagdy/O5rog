@@ -19,6 +19,15 @@
                     <p>
                         <em>Submitted by: <a href="/users/<%=place.author.id%>"><%= place.author.username %></a>, <%= moment(place.createdAt).fromNow() %></em>
                     </p>
+                    <div id="recommend" class="float-right text-center">
+                        <p id="recomCount">
+                            <%=place.recoms%> people recommend this place.
+                        </p>
+                        <form action="/places/<%=place.id%>/recom/?_method=PUT" method="post">
+                            <button id="recomButton" class="btn btn-xs btn-success">Recommend this place</a>
+                        </form>
+                    </div>
+                    
                     <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
                         <div class="btn-group" role="group">
                             <a class="btn btn-xs btn-warning m-2" href="/places/<%=place._id%>/edit">Edit Place</a>
