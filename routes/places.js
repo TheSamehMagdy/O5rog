@@ -94,20 +94,7 @@ router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
   });
 });
 
-// Recommend Place
-// router.get('/places/:id/recom', function(req, res) {
-//     Place.findById(req.params.id, function(err, foundPlace){
-//         if(err){
-//             req.flash("error", "Something went wrong.");
-//             res.redirect("back");
-//         } else {
-//             foundPlace.recoms++;
-//             res.redirect("back");
-//         }
-//     });  
-// });
-
-router.put("/places/:id/recom", function(req, res){
+router.put("/places/:id/recom", middleware.isLoggedIn, function(req, res){
     Place.findById(req.params.id, function(err, place){
         console.log(req.params.id);
         if(err){
