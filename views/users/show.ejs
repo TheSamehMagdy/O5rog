@@ -34,17 +34,20 @@
 
 <div class="row text-center">
     <div class="col-lg-12 mb-4">
-        <h3><%=user.firstName%>'s Recommended Places</h3>
+        <h3 class="mb-4"><%=user.firstName%>'s Recommended Places</h3>
+        <% if(recomPlaces == "") { %>
+            <p><%=user.firstName%> hasn't recommended any places yet.</p>
+        <% } %>    
     </div>
-        <% places.forEach(function(place){ %>
+        <% recomPlaces.forEach(function(recomPlace){ %>
             <div class="col-md-3">
                 <div class="card mb-4">
-                    <img class="card-img-top" src="<%=place.image%>" alt="Card image cap">
+                    <img class="card-img-top" src="<%=recomPlace.image%>" alt="Card image cap">
                     <div class="card-body">
-                        <h4 class="card-title"><%=place.name%></h4>
-                        <p class="card-text" lang="ar" dir="RTL"><%=place.address%></p>
+                        <h4 class="card-title"><%=recomPlace.name%></h4>
+                        <p class="card-text" lang="ar" dir="RTL"><%=recomPlace.address%></p>
                         <p>
-                            <a href="/places/<%= place._id %>" class="btn btn-primary">More Info</a>
+                            <a href="/places/<%= recomPlace._id %>" class="btn btn-primary">More Info</a>
                         </p>
                     </div>
                 </div>
