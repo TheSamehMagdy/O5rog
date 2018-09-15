@@ -68,10 +68,16 @@ router.get("/users/:id", function(req, res) {
        if(err) {
            req.flash("error", "User not found.");
            res.redirect("back");
-       }    
-        res.render("users/show", {user: foundUser, places: places});
+       }
+        Place.find().where("recomUsers").in(foundUser._id).exec(function(err, recomPlaces){
+            if(err) {
+                req.flash("error", "Something went wrong.");
+                res.redirect("back");    
+            }
+        res.render("users/show", {user: foundUser, places: places, recomPlaces: recomPlaces});
        });
    });
+});
 });
 
 module.exports = router;
