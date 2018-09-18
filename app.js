@@ -8,7 +8,9 @@ var express        = require("express"),
     methodOverride = require("method-override"),
     User           = require("./models/user"),
     Place          = require("./models/place");
-    
+
+require('dotenv').config();
+
 // Requiring routes
 var indexRoutes      = require("./routes/index");
 var placeRoutes      = require("./routes/places");

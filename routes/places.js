@@ -2,6 +2,28 @@ var express     = require("express");
 var router      = express.Router();
 var Place       = require("../models/place");
 var middleware  = require("../middleware");
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed.'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter});
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'o5rog', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 
 //INDEX - show all places
 router.get("/places", function(req, res){
@@ -37,29 +59,33 @@ router.get("/places/new", middleware.isLoggedIn, function(req, res){
     res.render("places/new");
 });
 
-//CREATE - add new place to DB
-router.post("/places", middleware.isLoggedIn, function(req, res){
+router.post("/places", middleware.isLoggedIn, upload.single("image"), function(req, res){
     // get data from form and add to places array
-    var name = req.body.name;
-    var address = req.body.address;
-    var image = req.body.image;
-    var desc = req.body.description;
-    var recoms = 0;
-    var author = {
-        id: req.user._id,
-        username: req.user.firstName + " " + req.user.lastName
-    };
-    var newPlace = {name: name, address: address, image: image, description: desc, author: author, recoms: recoms};
-    // Create a new place and save to DB
-    Place.create(newPlace, function(err, newlyCreated){
-        if(err) {
-            req.flash("error", "Failed to create new place.");
-            res.redirect("/places");
-        } else {
-            res.redirect("/places");    
-        }
+    cloudinary.uploader.upload(req.file.path, function(result) {
+        req.body.place.image = result.secure_url;
+        var name = req.body.place.name;
+        var address = req.body.place.address;
+        var desc = req.body.place.description;
+        var recoms = 0;
+        var author = {
+            id: req.user._id,
+            username: req.user.firstName + " " + req.user.lastName
+        };
+        var newPlace = {name: name, address: address, image: req.body.place.image, description: desc, author: author, recoms: recoms};
+        // Create a new campground and save to DB
+        Place.create(newPlace, function(err, newlyCreated){
+            if(err) {
+                req.flash("error", "Failed to create new place.");
+                res.redirect("/places");
+            } else {
+                res.redirect("/places");    
+            }
+        });
     });
 });
+ 
+
+
 
 //SHOW - show more info about one place
 router.get("/places/:id", function(req, res){
