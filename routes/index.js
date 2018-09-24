@@ -3,6 +3,27 @@ var router     = express.Router();
 var passport   = require("passport");
 var User       = require("../models/user");
 var Place      = require("../models/place");
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed.'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter});
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'o5rog', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Root Route
 router.get("/", function(req, res){
@@ -15,24 +36,27 @@ router.get("/signup", function(req, res) {
 });
 
 // Signup Logic
-router.post("/signup", function(req, res) {
-    var newUser = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.firstName + " " + req.body.lastName,
-        email: req.body.email,
-        avatar: req.body.avatar
-    });
-    
-    User.register(newUser, req.body.password, function(err, user){
+router.post("/signup", upload.single("avatar"), function(req, res) {
+    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+        if(err) {
+            req.flash("error", err.message);
+            return res.redirect("back");
+        }
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
+        var username = firstName + " " + lastName;
+        var email = req.body.email;
+        var newUser = {avatar: result.secure_url, avatarId: result.public_id, firstName: firstName, lastName: lastName, username: username, email: email};
+        User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
             return res.render("signup", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to Egyplaces, " + user.firstName + "!");
+            req.flash("success", "Welcome to O5rog, " + user.firstName + "!");
             res.redirect("/places");
         });
+    });
     });
 });
 

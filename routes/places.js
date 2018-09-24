@@ -59,6 +59,7 @@ router.get("/places/new", middleware.isLoggedIn, function(req, res){
     res.render("places/new");
 });
 
+//CREATE - Create new place
 router.post("/places", middleware.isLoggedIn, upload.single("image"), function(req, res){
     // get data from form and add to places array
     cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
@@ -77,7 +78,7 @@ router.post("/places", middleware.isLoggedIn, upload.single("image"), function(r
             username: req.user.firstName + " " + req.user.lastName
         };
         var newPlace = {name: name, address: address, image: req.body.place.image, imageId: req.body.place.imageId, description: desc, author: author, recoms: recoms};
-        // Create a new campground and save to DB
+        // Create a new place and save to DB
         Place.create(newPlace, function(err, newlyCreated){
             if(err) {
                 req.flash("error", "Failed to create new place.");
