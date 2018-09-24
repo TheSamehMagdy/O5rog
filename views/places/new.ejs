@@ -12,8 +12,11 @@
                         <input class="form-control" type="text" name="place[address]" placeholder="address" required>    
                     </div>
                     <div class="form-group">
-                        <label for="image">Place's Image</label>
-                        <input class="form-control" type="file" name="image" id="image" accept="image/*" required>
+                        Place's image
+                        <div class="custom-file mt-2">
+                            <label for="image" class="custom-file-label"></label>
+                            <input type="file" class="custom-file-input" name="image" id="image" accept="image/*" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <textarea class="form-control" name="place[description]" placeholder="Describe the place, write pros and cons, etc..."></textarea>    

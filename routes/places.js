@@ -61,8 +61,13 @@ router.get("/places/new", middleware.isLoggedIn, function(req, res){
 
 router.post("/places", middleware.isLoggedIn, upload.single("image"), function(req, res){
     // get data from form and add to places array
-    cloudinary.uploader.upload(req.file.path, function(result) {
+    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+        if(err) {
+            req.flash("error", err.message);
+            return res.redirect("back");
+        }
         req.body.place.image = result.secure_url;
+        req.body.place.imageId = result.public_id;
         var name = req.body.place.name;
         var address = req.body.place.address;
         var desc = req.body.place.description;
@@ -71,7 +76,7 @@ router.post("/places", middleware.isLoggedIn, upload.single("image"), function(r
             id: req.user._id,
             username: req.user.firstName + " " + req.user.lastName
         };
-        var newPlace = {name: name, address: address, image: req.body.place.image, description: desc, author: author, recoms: recoms};
+        var newPlace = {name: name, address: address, image: req.body.place.image, imageId: req.body.place.imageId, description: desc, author: author, recoms: recoms};
         // Create a new campground and save to DB
         Place.create(newPlace, function(err, newlyCreated){
             if(err) {
@@ -84,8 +89,6 @@ router.post("/places", middleware.isLoggedIn, upload.single("image"), function(r
     });
 });
  
-
-
 
 //SHOW - show more info about one place
 router.get("/places/:id", function(req, res){
@@ -114,12 +117,28 @@ router.get("/places/:id/edit", middleware.checkPlaceOwnership, function(req, res
 });
 
 //UPDATE - update place
-router.put("/places/:id", middleware.checkPlaceOwnership, function(req, res) {
-    Place.findByIdAndUpdate(req.params.id, req.body.place, function(err, updatedPlace){
+router.put("/places/:id", middleware.checkPlaceOwnership, upload.single("image"), function(req, res) {
+    Place.findById(req.params.id, async function(err, place){
         if(err) {
             req.flash("error", "Place not found.");
             res.redirect("/places");
         } else {
+            if(req.file) {
+                try {
+                    await cloudinary.v2.uploader.destroy(place.imageId);
+                    var result = await cloudinary.v2.uploader.upload(req.file.path);
+                    place.imageId = result.public_id;
+                    place.image = result.secure_url;
+                } catch(err) {
+                    req.flash("error", err.message);
+                    return res.redirect("back");    
+                }
+            }
+            place.name = req.body.place.name;
+            place.address = req.body.place.address;
+            place.description = req.body.place.description;
+            place.save();
+            req.flash("success", "Successfully updated!");
             res.redirect("/places/" + req.params.id);
         }
     });  
@@ -127,14 +146,23 @@ router.put("/places/:id", middleware.checkPlaceOwnership, function(req, res) {
 
 // DESTROY - delete place
 router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
-  Place.findByIdAndRemove(req.params.id, function(err){
-      if(err) {
-          req.flash("error", "Place not found.");
-          res.redirect("/places");
-      } else {
-          res.redirect("/places");
-      }
-  });
+    Place.findById(req.params.id, async function(err, place) {
+        if(err) {
+            req.flash("error", "Place not found.");
+            res.redirect("/places");    
+        }    
+        try {
+            await cloudinary.v2.uploader.destroy(place.imageId);
+            place.remove();
+            req.flash("success", "Place deleted successfully");
+            res.redirect("/places");
+        } catch(err) {
+            if(err) {
+            req.flash("error", "Place not found.");
+            res.redirect("/places");    
+            }        
+        }
+    });
 });
 
 // Recommend Place

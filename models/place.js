@@ -5,6 +5,7 @@ var placeSchema = new mongoose.Schema({
     name: String,
     address: String,
     image: String,
+    imageId: String,
     description: String,
     createdAt: {type: Date, default: Date.now},
     recoms: Number,

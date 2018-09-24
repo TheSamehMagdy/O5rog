@@ -7,3 +7,7 @@ nav {
     border: solid 1px #333;
     padding: 30px;
 }
+
+.custom-file-label {
+    overflow: hidden;
+}
