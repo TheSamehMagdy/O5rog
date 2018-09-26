@@ -11,3 +11,12 @@ nav {
 .custom-file-label {
     overflow: hidden;
 }
+
+.fb-button {
+    background: #4267b2;
+}
+.fa-facebook-square {
+    font-size: 1.4em;
+    vertical-align: middle;
+    outline: none;
+}

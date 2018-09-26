@@ -1,13 +1,14 @@
-var express        = require("express"),
-    app            = express(),
-    bodyParser     = require("body-parser"),
-    mongoose       = require("mongoose"),
-    flash          = require("connect-flash"),
-    passport       = require("passport"),
-    LocalStrategy  = require("passport-local"),
-    methodOverride = require("method-override"),
-    User           = require("./models/user"),
-    Place          = require("./models/place");
+var express          = require("express"),
+    app              = express(),
+    bodyParser       = require("body-parser"),
+    mongoose         = require("mongoose"),
+    flash            = require("connect-flash"),
+    passport         = require("passport"),
+    LocalStrategy    = require("passport-local"),
+    FacebookStrategy = require('passport-facebook').Strategy,
+    methodOverride   = require("method-override"),
+    User             = require("./models/user"),
+    Place            = require("./models/place");
 
 require('dotenv').config();
 
@@ -46,6 +47,35 @@ passport.use(new LocalStrategy({
     });
   }
 ));
+passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK,
+    profileFields: ["id", "displayName", "name", "emails", "picture.width(800)"]
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    var me = new User({
+			email: profile.emails[0].value,
+			username: profile.displayName,
+			firstName: profile.name.givenName,
+			lastName: profile.name.familyName,
+			avatar: profile.photos[0].value
+		});
+    User.findOne({email:me.email}, function(err, u) {
+			if(!u) {
+				me.save(function(err, me) {
+					if(err) return done(err);
+					done(null, me);
+				});
+			} else {
+				console.log(u);
+				done(null, u);
+			}
+		});
+  }
+));
+
 passport.use(LocalStrategy);
 User.createStrategy();
 passport.serializeUser(User.serializeUser());

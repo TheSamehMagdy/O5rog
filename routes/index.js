@@ -104,4 +104,10 @@ router.get("/users/:id", function(req, res) {
 });
 });
 
+// Facebook authorization
+router.get('/auth/facebook', passport.authenticate('facebook', {scope:"email"}));
+router.get('/auth/facebook/callback', passport.authenticate('facebook', 
+{ successRedirect: '/places', failureRedirect: '/login' }));
+
+
 module.exports = router;
