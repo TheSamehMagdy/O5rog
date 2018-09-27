@@ -50,7 +50,6 @@ router.post("/signup", upload.single("avatar"), function(req, res) {
         var newUser = {avatar: result.secure_url, avatarId: result.public_id, firstName: firstName, lastName: lastName, username: username, email: email};
         User.register(newUser, req.body.password, function(err, user){
         if(err){
-            console.log(err);
             return res.render("signup", {error: err.message});
         }
         passport.authenticate("local")(req, res, function(){
@@ -67,7 +66,7 @@ router.get("/login", function(req, res) {
 });
 
 // Login Logic
-router.post("/login", passport.authenticate("local", {failureRedirect: "/login"}), (req, res) => {
+router.post("/login", passport.authenticate("local", {failureRedirect: "/login", failureFlash: true}), function(req, res) {
     if (req.body.referer && (req.body.referer !== undefined && req.body.referer.slice(-6) !== "/login")) {
         // redirect to the page user was on before clicking "login"
         res.redirect(req.body.referer);
