@@ -5,7 +5,7 @@
                 <h1>Welcome to O5rog!</h1>
                 <p>Where you go to hangout.</p>
                 <p>
-                    <a class="btn btn-primary btn-lg" href="/places/new">Add New Place</a>
+                    <a class="btn btn-outline-info btn-lg" href="/places/new">Add New Place</a>
                 </p>
             </div>
         </header>
@@ -14,7 +14,7 @@
             <form action="/places" method="get" class="form-inline mx-auto">
                 <div class="form-group">
                     <input type="text" name="search" placeholder="Search for a place..." class="form-control mr-2">
-                    <input type="submit" value="Search" class="btn btn-success">
+                    <input type="submit" value="Search" class="btn btn-info">
                 </div>
             </form>
         </div>
@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 <h4 class="card-title"><%=place.name%></h4>
                                 <p class="card-text" lang="ar" dir="RTL"><%=place.address%></p>
-                                <a href="/places/<%=place._id%>" class="btn btn-primary">Info</a>
+                                <a href="/places/<%=place._id%>" class="btn btn-info">Info</a>
                             </div>
                         </div>
                     </div>

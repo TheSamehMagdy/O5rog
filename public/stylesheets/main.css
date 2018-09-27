@@ -1,5 +1,29 @@
 nav {
     margin-bottom: 2em;
+    background-color: #17a2b8;
+}
+
+.navbar a {
+    color: #fff!important;
+}
+
+.navbar a:hover {
+    color: #ecf0f1!important;
+}
+
+.jumbotron {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.btn-outline-info {
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-outline-info:hover {
+    background: #fff;
+    color: #17a2b8;
 }
 
 #recommend {
