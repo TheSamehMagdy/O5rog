@@ -23,3 +23,5 @@ An application for sharing cool hangout places in Egypt.
 • Notify the user when someone recommends or reviews one of their places.
 
 • Show place's location on Google Maps.
+
+• Optimize layout for mobile devices
