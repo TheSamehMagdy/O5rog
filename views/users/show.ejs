@@ -7,6 +7,9 @@
             <div class="card-body">
                 <h1 class="card-title"><%=user.firstName + " " + user.lastName%></h1>  
                 <a class="card-text" href="mailto:<%=user.email%>"><%=user.email%></a>
+                <% if(currentUser && currentUser._id.equals(user._id)) { %>
+                    <p class="mt-4"><a class="btn btn-info" href="/users/<%=user._id%>/edit">Edit Profile</a></p>
+                <% } %>
             </div>
         </div>
     </div>

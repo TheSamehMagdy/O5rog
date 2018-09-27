@@ -81,7 +81,7 @@ router.get("/logout", function(req, res) {
    res.redirect("/places");
 });
 
-// User profile
+// User profile - SHOW
 router.get("/users/:id", function(req, res) {
    User.findById(req.params.id, function(err, foundUser){
        if(err) {
@@ -102,6 +102,46 @@ router.get("/users/:id", function(req, res) {
        });
    });
 });
+});
+
+// User profile - EDIT
+router.get("/users/:id/edit", function(req, res) {
+   User.findById(req.params.id, function(err, foundUser){
+       if(err) {
+           req.flash("error", err.message);
+           res.redirect("back");
+       }
+        res.render("users/edit", {user: foundUser});
+       });
+});
+
+// User profile - UPDATE
+router.put("/users/:id", upload.single("avatar"), function(req, res) {
+    User.findById(req.params.id, async function(err, user){
+        if(err) {
+            req.flash("error", err.message);
+            res.redirect("back");
+        } else {
+            if(req.file) {
+                try {
+                    if(user.avatarId) {
+                        await cloudinary.v2.uploader.destroy(user.avatarId);
+                    }
+                    var result = await cloudinary.v2.uploader.upload(req.file.path);
+                    user.avatarId = result.public_id;
+                    user.avatar = result.secure_url;
+                } catch(err) {
+                    req.flash("error", err.message);
+                    return res.redirect("back");    
+                }
+            }
+            user.firstName = req.body.firstName;
+            user.lastName = req.body.lastName;
+            user.save();
+            req.flash("success", "Changes Saved!");
+            res.redirect("/users/" + req.params.id);
+        }
+    });  
 });
 
 // Facebook authorization

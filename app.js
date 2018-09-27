@@ -29,13 +29,16 @@ app.use(flash());
 app.locals.moment = require("moment");
 
 app.use(require("express-session")({
-    secret: "In brightest day, in blackest night, no evil shall escape my sight.",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
 
+// Passport Configuration 
 app.use(passport.initialize());
 app.use(passport.session());
+
+    // Passport Local
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -47,6 +50,8 @@ passport.use(new LocalStrategy({
     });
   }
 ));
+
+    //Passport Facebook
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -54,7 +59,6 @@ passport.use(new FacebookStrategy({
     profileFields: ["id", "displayName", "name", "emails", "picture.width(800)"]
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
     var me = new User({
 			email: profile.emails[0].value,
 			username: profile.displayName,
@@ -69,7 +73,6 @@ passport.use(new FacebookStrategy({
 					done(null, me);
 				});
 			} else {
-				console.log(u);
 				done(null, u);
 			}
 		});

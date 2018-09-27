@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+<div class="row text-center">
+    <div class="col-lg-12 mx-auto">
+        <h1 class="mb-4">Edit Profile</h1>
+        <div class="w-25 mx-auto">
+            <form action="/users/<%=user._id%>?_method=PUT" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input class="form-control" type="text" name="firstName" value="<%=user.firstName%>">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input class="form-control" type="text" name="lastName" value="<%=user.lastName%>">
+                </div>
+                <div class="form-group">
+                    Profile Picture:
+                    <div class="custom-file mt-2">
+                        <label for="avatar" class="custom-file-label"></label>
+                        <input type="file" class="custom-file-input" name="avatar" id="avatar" accept="image/*">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-success btn-block">Save Changes</button>
+                </div>
+            </form>
+            <a href="/users/<%=user._id%>">Go Back</a>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
