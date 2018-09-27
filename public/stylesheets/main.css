@@ -44,3 +44,7 @@ nav {
     vertical-align: middle;
     outline: none;
 }
+
+#user-avatar {
+    max-height: 500px;
+}
