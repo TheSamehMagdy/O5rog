@@ -1,14 +1,15 @@
 {
-  "name": "Egyplaces",
+  "name": "O5rog",
   "version": "1.0.0",
   "description": "An application for sharing cool places in Egypt.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "app.js"
   },
   "repository": {
     "type": "git",
-    "url": "egyplaces"
+    "url": "o5rog"
   },
   "author": "Sameh Magdy",
   "license": "ISC",
