@@ -1,5 +1,6 @@
 var Place   = require("../models/place");
 var Comment = require("../models/comment");
+var User    = require("../models/user")
 
 var middlewareObj = {};
 
@@ -53,6 +54,27 @@ middlewareObj.isLoggedIn = function(req, res, next){
     }
     req.flash("error", "You need to be logged in to do that.");
     res.redirect("/login");
+};
+
+middlewareObj.checkUser = function(req, res, next) {
+ if(req.isAuthenticated()){
+        User.findById(req.params.id, function(err, foundUser){
+           if(err || !foundUser){
+               req.flash("error", err.message);
+               res.redirect("/users/" + req.params.id);
+           }  else {
+            if(req.user && foundUser._id.equals(req.user._id)) {
+                next();
+            } else {
+                req.flash("error", "You don't have permission to do that.");
+                res.redirect("/users/" + req.params.id);
+            }
+           }
+        });
+    } else {
+        req.flash("error", "You need to be logged in to do that.");
+        res.redirect("/users/" + req.params.id);
+    }
 };
 
 module.exports = middlewareObj;

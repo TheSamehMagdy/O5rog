@@ -3,6 +3,7 @@ var router     = express.Router();
 var passport   = require("passport");
 var User       = require("../models/user");
 var Place      = require("../models/place");
+var middleware  = require("../middleware");
 var multer = require('multer');
 var storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -105,7 +106,7 @@ router.get("/users/:id", function(req, res) {
 });
 
 // User profile - EDIT
-router.get("/users/:id/edit", function(req, res) {
+router.get("/users/:id/edit", middleware.checkUser, function(req, res) {
    User.findById(req.params.id, function(err, foundUser){
        if(err) {
            req.flash("error", err.message);
@@ -116,7 +117,7 @@ router.get("/users/:id/edit", function(req, res) {
 });
 
 // User profile - UPDATE
-router.put("/users/:id", upload.single("avatar"), function(req, res) {
+router.put("/users/:id", middleware.checkUser, upload.single("avatar"), function(req, res) {
     User.findById(req.params.id, async function(err, user){
         if(err) {
             req.flash("error", err.message);
