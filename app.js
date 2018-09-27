@@ -38,7 +38,7 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
-    // Passport Local
+// Passport Local
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -46,7 +46,7 @@ passport.use(new LocalStrategy({
   User.authenticate()
 ));
 
-    //Passport Facebook
+//Passport Facebook
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -62,6 +62,9 @@ passport.use(new FacebookStrategy({
 			avatar: profile.photos[0].value
 		});
     User.findOne({email:me.email}, function(err, u) {
+            if(err) {
+                return done(err);
+            }
 			if(!u) {
 				me.save(function(err, me) {
 					if(err) return done(err);
@@ -74,6 +77,7 @@ passport.use(new FacebookStrategy({
   }
 ));
 
+// Passport sessions
 passport.use(LocalStrategy);
 User.createStrategy();
 passport.serializeUser(User.serializeUser());
@@ -86,6 +90,7 @@ app.use(function(req, res, next){
     next();
 });
 
+// Use routes
 app.use(indexRoutes);
 app.use(placeRoutes);
 app.use(commentRoutes);
