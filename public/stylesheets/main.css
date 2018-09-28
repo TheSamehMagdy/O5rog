@@ -30,6 +30,10 @@ nav {
     min-height: 400px;
 }
 
+.card-img-top {
+    max-height: 170px;
+}
+
 .card-title {
     text-transform: capitalize;
 }
