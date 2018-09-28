@@ -26,6 +26,10 @@ nav {
     color: #17a2b8;
 }
 
+.card {
+    min-height: 400px;
+}
+
 .card-title {
     text-transform: capitalize;
 }
