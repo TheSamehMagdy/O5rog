@@ -26,6 +26,10 @@ nav {
     color: #17a2b8;
 }
 
+.card-title {
+    text-transform: capitalize;
+}
+
 #recommend {
     margin-top: 20%;
     border: solid 1px #333;
