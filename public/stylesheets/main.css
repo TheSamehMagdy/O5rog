@@ -30,7 +30,7 @@ nav {
     min-height: 400px;
 }
 
-.card-img-top {
+.card-img-top.index {
     max-height: 170px;
 }
 
