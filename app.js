@@ -16,6 +16,7 @@ require('dotenv').config();
 var indexRoutes      = require("./routes/index");
 var placeRoutes      = require("./routes/places");
 var commentRoutes    = require("./routes/comments");
+var apiRoutes        = require("./routes/api");
 
 // Set up database env variable
 var url = process.env.DATABASEURL || "mongodb://localhost/o5rog";
@@ -94,6 +95,7 @@ app.use(function(req, res, next){
 app.use(indexRoutes);
 app.use(placeRoutes);
 app.use(commentRoutes);
+app.use(apiRoutes);
 
 // Start server
 app.listen(process.env.PORT, process.env.IP, function() {
