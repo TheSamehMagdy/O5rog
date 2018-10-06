@@ -6,7 +6,7 @@
                 <img class="card-img-top" src="<%=place.image%>" alt="Card image cap">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-lg-8">
                             <h4 class="card-title"><%=place.name%></h4>
                             <h4 class="card-text" lang="ar" dir="RTL"><%=place.address%></h4>
                             <p> <%= place.description %> </p>
@@ -14,7 +14,7 @@
                                 <em>Submitted by: <a href="/users/<%=place.author.id%>"><%= place.author.username %></a>, <%= moment(place.createdAt).fromNow() %></em>
                             </p>    
                         </div>
-                        <div class="col-4 text-center" id="recommend">
+                        <div class="col-lg-4 text-center" id="recommend">
                             <p id="recomCount">
                                 <% if(place.recoms > 1){ %>
                                     <%=place.recoms%> people recommend this place.
