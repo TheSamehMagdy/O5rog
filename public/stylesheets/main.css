@@ -16,6 +16,10 @@ nav {
     color: #fff;
 }
 
+.btn {
+    white-space: normal;
+}
+
 .btn-outline-info {
     color: #fff;
     border-color: #fff;
@@ -39,9 +43,9 @@ nav {
 }
 
 #recommend {
-    margin-top: 20%;
+    margin-top: 5%;
     border: solid 1px #333;
-    padding: 30px;
+    padding: 2em;
 }
 
 .custom-file-label {
