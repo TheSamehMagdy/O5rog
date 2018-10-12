@@ -2,6 +2,8 @@ var express     = require("express");
 var router      = express.Router();
 var Place       = require("../models/place");
 var middleware  = require("../middleware");
+var Comment     = require("../models/comment");
+var Review = require("../models/review");
 var multer = require('multer');
 var storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -94,7 +96,10 @@ router.post("/places", middleware.isLoggedIn, upload.single("image"), function(r
 //SHOW - show more info about one place
 router.get("/places/:id", function(req, res){
     // find place with provided ID
-    Place.findById(req.params.id).populate("comments").exec(function(err, foundPlace){
+    Place.findById(req.params.id).populate("comments").populate({
+        path: "reviews",
+        options: {sort: {createdAt: -1}}
+    }).exec(function(err, foundPlace){
        if(err || !foundPlace) {
            req.flash("error", "Place not found.");
            res.redirect("back");
@@ -119,6 +124,7 @@ router.get("/places/:id/edit", middleware.checkPlaceOwnership, function(req, res
 
 //UPDATE - update place
 router.put("/places/:id", middleware.checkPlaceOwnership, upload.single("image"), function(req, res) {
+    delete req.body.campground.rating;
     Place.findById(req.params.id, async function(err, place){
         if(err) {
             req.flash("error", "Place not found.");
@@ -153,7 +159,12 @@ router.delete("/places/:id", middleware.checkPlaceOwnership, function(req, res){
             res.redirect("/places");    
         }    
         try {
+            // delete place's image from cloudinary
             await cloudinary.v2.uploader.destroy(place.imageId);
+            // delete all comments associated with the place
+            Comment.remove({"_id": {$in: place.comments}});
+            // delete all reviews associated with the place
+            Review.remove({"_id": {$in: place.reviews}});
             place.remove();
             req.flash("success", "Place deleted successfully");
             res.redirect("/places");

@@ -65,3 +65,7 @@ nav {
 #user-avatar {
     max-height: 500px;
 }
+
+.checked {
+    color: orange;
+}

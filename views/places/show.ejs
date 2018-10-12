@@ -50,36 +50,56 @@
             <hr>
             <div class="card">
                   <div class="card-header">
-                            <div class="d-inline">Reviews</div>
-                            <a class="btn btn-success float-right" href="/places/<%=place._id%>/comments/new">Leave a Review</a>    
+                        <h5 class="d-inline">Reviews</h5>
+                        <a class="btn btn-success float-right <% if (currentUser && place.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>" href="/places/<%= place._id %>/reviews/new">
+                            Write a New Review</a>
                   </div>
                   <ul class="list-group list-group-flush">
-                    <% place.comments.forEach(function(comment){ %>
+                    <% if (place.rating === 0) { %>
+                    <li class="list-group-item">
+                        <em>No reviews yet.</em>
+                    </li>
+                    <% } else { %>
+                    <li class="list-group-item">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star <% if (place.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 2.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 3.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 4.5) { %> checked <% } %>"></span>
+                        <em>(total reviews: <%= place.reviews.length %>)</em>
+                        <p>Current place rating: <strong><%= place.rating.toFixed(2) %></strong></p>
+                        <p class="mb-0"><strong>Latest reviews for this place:</strong></p>
+                    </li>
+                    <% place.reviews.slice(0, 5).forEach(function(review){ %>
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <strong><a href="/users/<%=comment.author.id%>"><%= comment.author.username %></a></strong>
-                                    <span class="text-right"><%= moment(comment.createdAt).fromNow() %></span> <br>
-                                    <p class="d-inline-flex float-left clearfix">
-                                        <%= comment.text %>  
+                                    <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+                                    <div class="mb-3">
+                                        Review by: <strong><a href="/users/<%=review.author.id%>"><%= review.author.username %></a></strong>
+                                        <span class="float-right"><em><%= review.updatedAt.toDateString() %></em></span>
+                                    </div>
+                                    <p class="d-inline-flex float-left clearfix text-justify">
+                                        <%= review.text %>  
                                     </p>
-                                    <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-                                        <div class="float-right">
-                                            <a class="btn btn-xs btn-primary mr-2" 
-                                                href="/places/<%=place._id%>/comments/<%=comment._id%>/edit">
-                                                Edit
-                                            </a>
-                                            <form class="delete-form d-inline" action="/places/<%=place._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">    
-                                            </form>
-                                        </div>
+                                    <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                                    <div class="float-right">
+                                        <a class="btn btn-xs btn-primary mr-2"
+                                           href="/places/<%=place._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                                        <form class="delete-form d-inline" action="/places/<%=place._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST">
+                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                        </form>
+                                    </div>
                                     <% } %>
                                 </div>
                             </div>
                         </li>
-                    <% }) %>
+                    <% }); %>
+                    <li class="list-group-item">
+                        <h5 class="mt-2"><a href="/places/<%= place._id %>/reviews"><i class="fa fa-search" aria-hidden="true"></i> See all reviews</a></h5>
+                    </li>
+                    <% } %>
                   </ul>
-                </div>
             </div>
         </div>
     </div>    

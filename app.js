@@ -16,6 +16,7 @@ require('dotenv').config();
 var indexRoutes      = require("./routes/index");
 var placeRoutes      = require("./routes/places");
 var commentRoutes    = require("./routes/comments");
+var reviewRoutes     = require("./routes/reviews");
 var apiRoutes        = require("./routes/api");
 
 // Set up database env variable
@@ -95,6 +96,7 @@ app.use(function(req, res, next){
 app.use(indexRoutes);
 app.use(placeRoutes);
 app.use(commentRoutes);
+app.use(reviewRoutes);
 app.use(apiRoutes);
 
 // Start server

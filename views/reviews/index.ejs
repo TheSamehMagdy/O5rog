@@ -1,0 +1,65 @@
+<% include ../partials/header %>
+
+    <div class="row text-center">
+        <div class="col-lg-12 mx-auto">
+            <h1>Review Page: <%= place.name %></h1>
+            <a href="/places/<%= place._id %>">Go back to the place page</a>
+            <div class="card">
+                <div class="card-body">
+                    <% if (place.rating === 0) { %>
+                    <h5>
+                        <em>No reviews yet.</em>
+                    </h5>
+                    <% } else { %>
+                    <p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star <% if (place.rating > 1.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 2.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 3.5) { %> checked <% } %>"></span>
+                        <span class="fa fa-star <% if (place.rating > 4.5) { %> checked <% } %>"></span>
+                        <em>(total reviews: <%= place.reviews.length %>)</em>
+                    </p>
+                    <p>
+                        Current place rating: <strong><%= place.rating.toFixed(2) %></strong>
+                    </p>
+                    <p><h4>All reviews for this place:</h4></p>
+                    <hr class="mt-0">
+                    <% place.reviews.forEach(function(review){ %>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <%- '<span class="fa fa-star checked"></span>'.repeat(review.rating) %><%- '<span class="fa fa-star"></span>'.repeat(5 - review.rating) %>
+                            <div>Review by: <strong><%= review.author.username %></strong></div>
+                            <span><em><%= review.updatedAt.toDateString() %></em></span>
+                        </div>
+                        <div class="col-md-9">
+                            <p class="text-center mt-4" style="word-wrap: break-word;">
+                                <%= review.text %>
+                            </p>
+                            <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                            <div>
+                                <a class="btn btn-xs btn-primary mr-2"
+                                   href="/places/<%=place._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                                <form class="delete-form d-inline" action="/places/<%=place._id %>/reviews/<%=review._id %>?_method=DELETE" method="POST">
+                                    <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                </form>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <hr>
+                    <% }); %>
+                    <% } %>
+                    <div>
+                        <a class="btn btn-info <% if (currentUser && place.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>" href="/places/<%= place._id %>/reviews/new">
+                            Write a New Review</a>
+                    </div>
+                    <div class="mt-2">
+                        <a class="btn btn-default" href="/places/<%= place._id %>"><i class="fa fa-arrow-left"></i> Go back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Review section-->
+
+<% include ../partials/footer %>

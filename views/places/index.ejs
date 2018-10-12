@@ -26,6 +26,15 @@
                             <img class="card-img-top index" src="<%=place.image%>" alt="Card image cap">
                             <div class="card-body">
                                 <h4 class="card-title"><%=place.name%></h4>
+                                <% if (place.rating === 0) { %>
+                                <em>No reviews yet.</em>
+                                <% } else { %>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star <% if (place.rating > 1.5) { %> checked <% } %>"></span>
+                                <span class="fa fa-star <% if (place.rating > 2.5) { %> checked <% } %>"></span>
+                                <span class="fa fa-star <% if (place.rating > 3.5) { %> checked <% } %>"></span>
+                                <span class="fa fa-star <% if (place.rating > 4.5) { %> checked <% } %>"></span>
+                                <% } %>
                                 <p class="card-text" lang="ar" dir="RTL"><%=place.address%></p>
                                 <a href="/places/<%=place._id%>" class="btn btn-info">Info</a>
                             </div>
