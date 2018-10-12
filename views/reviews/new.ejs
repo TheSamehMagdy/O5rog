@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 
     <div class="row text-center">
-        <div class="col-lg-12 mx-auto">
+        <div class="col-12 mx-auto">
             <h1>New Review: <%= place.name %></h1>
             <div class="w-25 my-3 mx-auto">
                 <form action="/places/<%= place._id %>/reviews" method="POST">
