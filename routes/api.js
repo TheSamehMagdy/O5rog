@@ -3,6 +3,7 @@ var app           = express();
 var router        = express.Router();
 var LocalStrategy = require("passport-local");
 var passport      = require("passport");
+var jwt           = require("jsonwebtoken");
 var User          = require("../models/user");
 var Place         = require("../models/place");
 var middleware    = require("../middleware");
@@ -181,18 +182,38 @@ router.post("/api/signup", upload.single("avatar"), function(req, res, next) {
         var newUser = {avatar: result.secure_url, avatarId: result.public_id, firstName: firstName, lastName: lastName, username: username, email: email};
         User.register(newUser, req.body.password, function(err, user){
         if(err){
-            return next(err);
+            return res.status(500).send('An error occurred: ' + err);
         }
-        passport.authenticate("local")(req, res, function(){
-            res.json(user);
+        passport.authenticate("local", {session: false})(req, res, function(){
+            res.status(200).send('Signed up successfully');
         });
     });
     });
 });
 
 // LOGIN
-router.post("/api/login", passport.authenticate("local", {successRedirect: '/api/places', failureFlash: true}), function(req, res, next) {
-        res.json(req.user);
+router.post("/api/login", function(req, res, next) {
+        if (!req.body.email || !req.body.password) {
+            return res.status(400).json({
+                message: "Something is not right with your input"
+            });
+        }
+        passport.authenticate('local', {session: false}, (err, user, info) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    message: "Something went wrong",
+                    user   : user
+                });
+            }
+            req.login(user, {session: false}, (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                // generate a signed json web token with the contents of user object and return it in the response
+                var token = jwt.sign({ id: user.id, email: user.username}, process.env.JWT_SECRET);
+                return res.json({user: user.username, token});
+            });
+        })(req, res);
 });
 
 // LOGOUT

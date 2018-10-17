@@ -6,6 +6,9 @@ var express          = require("express"),
     passport         = require("passport"),
     LocalStrategy    = require("passport-local"),
     FacebookStrategy = require('passport-facebook').Strategy,
+    passportJWT      = require("passport-jwt"),
+    JWTStrategy      = passportJWT.Strategy,
+    ExtractJWT       = passportJWT.ExtractJwt,
     methodOverride   = require("method-override"),
     User             = require("./models/user"),
     Place            = require("./models/place");
@@ -84,6 +87,22 @@ passport.use(LocalStrategy);
 User.createStrategy();
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// Passport JWT
+passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey   : process.env.JWT_SECRET
+    },
+    function (jwtPayload, cb) {
+        return User.findById(jwtPayload.id)
+            .then(user => {
+                return cb(null, user);
+            })
+            .catch(err => {
+                return cb(err);
+            });
+    }
+));
 
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
