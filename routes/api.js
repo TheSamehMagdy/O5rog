@@ -4,6 +4,7 @@ var router        = express.Router();
 var LocalStrategy = require("passport-local");
 var passport      = require("passport");
 var jwt           = require("jsonwebtoken");
+var FacebookTokenStrategy = require('passport-facebook-token');
 var User          = require("../models/user");
 var Place         = require("../models/place");
 var middleware    = require("../middleware");
@@ -28,6 +29,36 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+passport.use(new FacebookTokenStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET
+  }, function(accessToken, refreshToken, profile, done) {
+    var me = new User({
+			email: profile.emails[0].value,
+			facebookId: profile.id,
+			username: profile.displayName,
+			firstName: profile.name.givenName,
+			lastName: profile.name.familyName,
+			avatar: profile.photos[0].value,
+			token: accessToken
+		});
+    User.findOne({email:me.email}, function(err, u) {
+            if(err) {
+                return done(err);
+            }
+			if(!u) {
+				me.save(function(err, me) {
+					if(err) return done(err);
+					done(null, me);
+				});
+			} else {
+				done(null, u);
+			}
+		});
+  }
+));
+
 
 //=================//
 // PLACES ROUTES   //
@@ -221,10 +252,17 @@ router.get("/api/logout", function(req, res, next) {
    req.logout();
 });
 
-// Facebook authorization
-router.get('/api/auth/facebook', passport.authenticate('facebook', {scope:"email"}));
-router.get('/api/auth/facebook/callback', passport.authenticate('facebook', 
-{ successRedirect: '/places', failureRedirect: '/login' }));
+// Facebook auth
+router.post('/api/auth/facebook/',
+  passport.authenticate('facebook-token', {scope: ["email"]}),
+  function (req, res) {
+    if (req.user) {
+        res.json(req.user);
+    }
+  }
+);
+
+
 
 //=================//
 // USER PROFILES   //
