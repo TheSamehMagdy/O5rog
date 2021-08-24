@@ -9,6 +9,9 @@
                 <a class="card-text" href="mailto:<%=user.email%>"><%=user.email%></a>
                 <% if(currentUser && currentUser._id.equals(user._id)) { %>
                     <p class="mt-4"><a class="btn btn-info" href="/users/<%=user._id%>/edit">Edit Profile</a></p>
+                    <form action="/users/<%=user._id%>/delete?_method=DELETE" method="POST" enctype="multipart/form-data">
+                        <button class="mt-4 btn btn-danger" type="submit">Delete Account</button>
+                    </form>
                 <% } %>
             </div>
         </div>

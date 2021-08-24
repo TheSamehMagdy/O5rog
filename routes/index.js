@@ -144,6 +144,19 @@ router.put("/users/:id", middleware.checkUser, upload.single("avatar"), function
     });  
 });
 
+// User profile - DELETE
+router.delete("/users/:id/delete", middleware.checkUser, function(req, res) {
+    User.findById(req.params.id, function(err, foundUser){
+        if(err) {
+            req.flash("error", err.message);
+            res.redirect("back");
+        }
+            foundUser.remove();
+            req.flash('success', 'User deleted successfully.');
+            res.redirect('/') ;
+        });
+ });
+
 // Facebook authorization
 router.get('/auth/facebook', passport.authenticate('facebook', {scope:"email"}));
 router.get('/auth/facebook/callback', passport.authenticate('facebook', 
